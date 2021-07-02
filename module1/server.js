@@ -5,9 +5,9 @@ const app = express();
 //middleware
 app.use(express.json());
 
-const movies = [{id: 1, name:'movie1'},
-                {id: 2, name:'movie2'},
-                {id: 3, name:'movie3'},];
+const movies = [{id: 1, name:'movie1', genre: 'drama'},
+                {id: 2, name:'movie2', genre: 'action'}, 
+                {id: 3, name:'movie3', genre: 'romance'},];
 
 app.get('/', (req, res) => {
     res.send('hello reflix');
@@ -71,9 +71,19 @@ app.put('/api/movies/:id', (req, res) => {
 
 });
 
+app.delete('/api/movies/:id', (req, res) => {
 
+    const movie = movies.find(c => c.id === parseInt(req.params.id));
+    if (!movie) res.status(404).send('given ID not found !!');
+
+    const index = movies.indexOf(movie);
+    movies.splice(index, 1);
+
+    res.send(movie);
+
+});
 
 
 // port config
-const port = process.env.PORT || 3000
-app.listen(port, () => console.log(`listening on port ${port} ...`))
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`listening on port ${port} ...`));
