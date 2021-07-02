@@ -48,6 +48,31 @@ app.post('/api/movies', (req, res) => {
     res.send(movie);
 });
 
+app.put('/api/movies/:id', (req, res) => {
+
+    const movie = movies.find(c => c.id === parseInt(req.params.id));
+    if (!movie) res.status(404).send('given ID not found !!');
+
+
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    const result = Joi.valid(req.body, schema);
+
+     if (!req.body.name || req.body.name.length < 3) {
+
+        res.status(404).send("name is required to be minimum 3 characters");
+        return;
+    }
+
+    movie.name = req.body.name;
+    res.send(movie);
+
+});
+
+
+
 
 // port config
 const port = process.env.PORT || 3000
