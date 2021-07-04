@@ -1,89 +1,22 @@
-const Joi = require('joi');
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
+const movie = require("../module1/backend/routes/routes");
 const app = express();
+const port = process.env.PORT || 5000;
+const postRouter = require('./backend/routes/routes');
+
+require('./backend/db/mongoose')
 
 //middleware
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use('/movies', postRouter);
 
-const movies = [{id: 1, name:'movie1', genre: 'drama'},
-                {id: 2, name:'movie2', genre: 'action'}, 
-                {id: 3, name:'movie3', genre: 'romance'},];
+// console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+// app.use("/movie", movie);
+// app.get('/', (req, res) => {
+//     res.send("Hello World!")
+// })
 
-app.get('/', (req, res) => {
-    res.send('hello reflix');
-});
-
-app.get('/api/movies', (req, res) => {
-    res.send(movies);
-});
-
-app.get('/api/movies/:id', (req, res) => {
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) res.status(404).send('given ID not found !!')  // 404
-    res.send(movie);
-});
-
-app.post('/api/movies', (req, res) => {
-
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    const result = Joi.valid(req.body, schema);
-    console.log(result);
-
-    if (!req.body.name || req.body.name.length < 3) {
-
-        res.status(404).send("name is required to be minimum 3 characters");
-        return;
-    }
-
-
-    const movie = {
-        id: movies.length + 1,
-        name: req.body.name
-    };
-
-    movies.push(movie);
-    res.send(movie);
-});
-
-app.put('/api/movies/:id', (req, res) => {
-
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) res.status(404).send('given ID not found !!');
-
-
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    const result = Joi.valid(req.body, schema);
-
-     if (!req.body.name || req.body.name.length < 3) {
-
-        res.status(404).send("name is required to be minimum 3 characters");
-        return;
-    }
-
-    movie.name = req.body.name;
-    res.send(movie);
-
-});
-
-app.delete('/api/movies/:id', (req, res) => {
-
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) res.status(404).send('given ID not found !!');
-
-    const index = movies.indexOf(movie);
-    movies.splice(index, 1);
-
-    res.send(movie);
-
-});
-
-
-// port config
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`listening on port ${port} ...`));
+app.listen(port, () => console.log(`Server running on port ${port} ..`));

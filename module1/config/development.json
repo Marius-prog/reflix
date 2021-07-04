@@ -1,0 +1,6 @@
+{
+    "name": "my express app - development",
+    "movie": {
+        "host": "dev-movie-server"
+    }
+}
