@@ -2,12 +2,18 @@ const mongoose = require('mongoose')
 const schema = mongoose.Schema;
 
 const MovieSchema = new schema({
-    name: {type: String},
-    author: {type: String},
+    title: {type: String},
     year: {type: Number},
+    time: {type: Number},
     genre: {type: String},
+    rating: {type: Number},
+    metascore: {type: Number},
+    vote: {type: Number},
+    gross: {type: Number},
     description: {type: String},
-    ratio: {type: Number},
+
+    // author: {type: String, required: true},
+    // genre: {type: String, required: true},
 
 
 });
