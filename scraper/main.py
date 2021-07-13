@@ -3,8 +3,12 @@ try:
     from pymongo import MongoClient
     import pandas as pd
     import json
+    import schedule
+    import time
 except Exception as e:
     print("Some Modules are Missing ")
+
+from scraper import scrape
 
 
 class MongoDB(object):
@@ -14,7 +18,7 @@ class MongoDB(object):
         self.collectionName = collectionName
 
         self.client = MongoClient(
-            "mongodb+srv://admin:reflix123@cluster0.y8m8v.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+            "mongodb+srv://reflix:reflix123@cluster0.y8m8v.mongodb.net/reflix?retryWrites=true&w=majority")
 
         self.DB = self.client[self.dBName]
         self.collection = self.DB[self.collectionName]
@@ -27,6 +31,27 @@ class MongoDB(object):
         print("All the Data has been Exported to Mongo DB Server .... ")
 
 
-if __name__ == "__main__":
-    mongodb = MongoDB(dBName='Reflix', collectionName='Movie collection')
-    mongodb.InsertData(path="Top 1000 IMDb movies_sorted_by_popularity_new.csv")
+def run_mongo_update():
+    movie_list = scrape()
+    movie_list.head(5)
+    movie_list.to_csv("Top 1000 IMDb movies_sorted_by_popularity_new.csv")
+    mongodb = MongoDB(dBName='reflix', collectionName='movies')
+    try:
+        mongodb.InsertData(path="Top 1000 IMDb movies_sorted_by_popularity_new.csv")
+    except Exception as e:
+        movie_list.to_csv("Top 1000 IMDb_error.csv")
+        print('an exception occurred: ', e)
+
+    f = open('Top 1000 IMDb movies_sorted_by_popularity_new.csv', 'r+')
+    f.truncate(0)
+
+
+def go():
+    run_mongo_update()
+
+
+schedule.every(3).seconds.do(go)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1.3)

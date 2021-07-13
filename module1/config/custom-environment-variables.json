@@ -1,6 +1,0 @@
-{
-  "movie": {
-    "password": "api_password"
-  },
-  "jwtPrivateKey": "reflix_jwtPrivateKey"
-}

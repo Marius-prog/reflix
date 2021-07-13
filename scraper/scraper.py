@@ -7,7 +7,7 @@ from random import randint
 
 headers = {"Accept-Language": "en-US,en;q=0.5"}
 
-movie_name = []
+title = []
 year = []
 time = []
 genre = []
@@ -35,7 +35,7 @@ def scrape():
         sleep(randint(2, 8))
         for store in movie_data:
             name = store.h3.a.text
-            movie_name.append(name)
+            title.append(name)
 
             year_of_release = store.h3.find('span', class_='lister-item-year text-muted unbold').text.replace('\n', '')
             year.append(year_of_release)
@@ -67,14 +67,7 @@ def scrape():
 
     # creating a dataframe
     movie_list = pd.DataFrame(
-        {"Movie Name": movie_name, "Year of Release": year, "Genre": genre, "Watch Time": time, "Movie Rating": rating,
+        {"Movie Name": title, "Year of Release": year, "Genre": genre, "Watch Time": time, "Movie Rating": rating,
          "Meatscore of movie": metascore, "Votes": votes, "Gross": gross, "Description": description})
 
     return movie_list
-
-
-movie_list = scrape()
-movie_list.head(5)
-movie_list.to_csv("Top 1000 IMDb movies_sorted_by_popularity_new.csv")
-
-

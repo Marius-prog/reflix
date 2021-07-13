@@ -1,6 +1,0 @@
-{
-    "name": "my express app - production",
-    "movie": {
-        "host": "prod-movie-server"
-    }
-}
