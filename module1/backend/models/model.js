@@ -10,11 +10,7 @@ const MovieSchema = new schema({
     metascore: {type: Number},
     vote: {type: Number},
     gross: {type: Number},
-    description: {type: String},
-
-    // author: {type: String, required: true},
-    // genre: {type: String, required: true},
-
+    description: {type: String}
 
 });
 

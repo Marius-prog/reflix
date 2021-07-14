@@ -1,18 +1,9 @@
-const auth = require('../middleware/auth')
 const express = require("express");
 const Movie = require("../models/model")
 const router = express.Router();
-const admin = require('../middleware/admin')
-
-// const controller = require("../controllers/controller");
-// router.post("/create", controller.movie_create);
-// router.get("/", controller.all_movies);
-// router.get("/:id", controller.movie_details);
-// router.put("/:id/update", controller.movie_update);
-// router.delete("/:id/delete", controller.movie_delete);
 
 
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
     const movies = await Movie.find()
     res.send(movies)
 });
@@ -27,7 +18,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.post("/post", auth, async (req, res) => {
+router.post("/post", async (req, res) => {
 
     const movie = new Movie({
 
@@ -43,7 +34,7 @@ router.post("/post", auth, async (req, res) => {
 
     })
     await movie.save()
-    res.send(movie)
+    res.sendStatus(200)
 });
 
 router.put("/put/:id", async (req, res) => {
@@ -63,7 +54,7 @@ router.put("/put/:id", async (req, res) => {
     }
 });
 
-router.delete("/delete/:id", [auth, admin], async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     try {
         await Movie.deleteOne({_id: req.params.id})
         res.send({message: "Succesfully deleted.."})
