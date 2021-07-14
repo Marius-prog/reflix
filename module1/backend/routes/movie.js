@@ -34,7 +34,7 @@ router.post("/post", async (req, res) => {
 
     })
     await movie.save()
-    res.send(movie)
+    res.sendStatus(200)
 });
 
 router.put("/put/:id", async (req, res) => {
